@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { TGrid, TLetter, TRow } from "../../types";
+import { TGrid, TLetter, TRow } from "../../helpers/types";
 import Grid from "../Grid";
 
 const nrows = 6;

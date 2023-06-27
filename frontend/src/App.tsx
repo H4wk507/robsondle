@@ -4,6 +4,7 @@ import Wordle from "./components/Wordle";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import { useCookies } from "react-cookie";
+import Register from "./components/Register";
 
 const Layout = ({ children }: { children: JSX.Element }) => {
   return (
@@ -38,8 +39,16 @@ export default function App() {
         element: (
           <Layout>
             <ProtectedContent>
-              <div>CHuj</div>
+              <div>You are already logged in!</div>
             </ProtectedContent>
+          </Layout>
+        ),
+      },
+      {
+        path: "/register",
+        element: (
+          <Layout>
+            <Register />
           </Layout>
         ),
       },
