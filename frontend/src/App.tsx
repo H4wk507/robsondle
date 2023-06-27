@@ -21,27 +21,32 @@ const ProtectedContent = ({ children }: { children?: JSX.Element }) => {
 };
 
 export default function App() {
-  const router = createBrowserRouter([
+  const router = createBrowserRouter(
+    [
+      {
+        path: "/",
+        element: (
+          <Layout>
+            <ProtectedContent>
+              <Wordle />
+            </ProtectedContent>
+          </Layout>
+        ),
+      },
+      {
+        path: "/login",
+        element: (
+          <Layout>
+            <ProtectedContent>
+              <div>CHuj</div>
+            </ProtectedContent>
+          </Layout>
+        ),
+      },
+    ],
     {
-      path: "/",
-      element: (
-        <Layout>
-          <ProtectedContent>
-            <Wordle />
-          </ProtectedContent>
-        </Layout>
-      ),
+      basename: "/robsondle",
     },
-    {
-      path: "/login",
-      element: (
-        <Layout>
-          <ProtectedContent>
-            <div>CHuj</div>
-          </ProtectedContent>
-        </Layout>
-      ),
-    },
-  ]);
+  );
   return <RouterProvider router={router} />;
 }

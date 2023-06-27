@@ -59,7 +59,7 @@ export default function Wordle() {
           setGrid(
             grid.map((row, i) =>
               row.map((val, j) =>
-                i === currentRow
+                i === currentRow && val.value // TODO: remove this
                   ? {
                       ...val,
                       color:
