@@ -1,10 +1,7 @@
-import { useForm } from "react-hook-form";
 import { CookieSetOptions } from "universal-cookie";
-
-interface LoginData {
-  name: string;
-  password: string;
-}
+import UserForm from "../UserForm";
+import { FormData } from "../../helpers/types";
+import { API_LOGIN_URL } from "../../helpers/constants";
 
 interface LoginProps {
   setCookie: (
@@ -15,16 +12,14 @@ interface LoginProps {
 }
 
 export default function Login({ setCookie }: LoginProps) {
-  const { register, handleSubmit } = useForm<LoginData>();
-
-  const onSubmit = async (loginData: LoginData) => {
+  const onSubmit = async (formData: FormData) => {
     try {
-      const res = await fetch("http://192.168.0.103/api/users/authenticate", {
+      const res = await fetch(API_LOGIN_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(loginData),
+        body: JSON.stringify(formData),
       });
       const sessionToken = await res.json();
       setCookie("sessionToken", sessionToken, { path: "/" });
@@ -33,28 +28,5 @@ export default function Login({ setCookie }: LoginProps) {
     }
   };
 
-  return (
-    <div className="form-wrapper">
-      <div className="form">
-        <div className="form-title">Login</div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <input
-            className="name"
-            type="text"
-            placeholder="login"
-            {...register("name")}
-          />
-          <input
-            className="password"
-            type="password"
-            placeholder="password"
-            {...register("password")}
-          />
-          <div className="submit-btn-container">
-            <button className="submit-btn">Submit</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+  return <UserForm title="login" submitBtnText="Log in" onSubmit={onSubmit} />;
 }

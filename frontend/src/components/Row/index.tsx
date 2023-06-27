@@ -1,4 +1,4 @@
-import { TRow } from "../../types";
+import { TRow } from "../../helpers/types";
 import Square from "../Square";
 
 interface RowProps {

@@ -1,4 +1,4 @@
-import { TGrid } from "../../types";
+import { TGrid } from "../../helpers/types";
 import Row from "../Row";
 
 interface GridProps {

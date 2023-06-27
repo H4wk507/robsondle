@@ -11,11 +11,14 @@ export default function Navbar() {
     <div className="navbar">
       <button
         onClick={() =>
-          loggedIn ? removeCookie("sessionToken") : navigate("login")
+          loggedIn ? removeCookie("sessionToken") : navigate("/login")
         }
         className="login-btn"
       >
         {loggedIn ? "Logout" : "Login"}
+      </button>
+      <button onClick={() => navigate("/register")} className="register-btn">
+        Register
       </button>
     </div>
   );

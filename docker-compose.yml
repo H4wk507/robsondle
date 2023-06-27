@@ -1,0 +1,14 @@
+version: '3'
+services:
+  frontend: 
+    build: ./frontend
+    ports: 
+      - "2137:5173"
+    container_name: robsondle-frontend
+    restart: always
+  backend:
+    build: ./backend
+    ports:
+      - "5050:80"
+    container_name: robsondle-backend
+    restart: always

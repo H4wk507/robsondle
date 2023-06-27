@@ -1,4 +1,4 @@
-import { TLetter } from "../../types";
+import { TLetter } from "../../helpers/types";
 
 interface SquareProps {
   letter: TLetter;

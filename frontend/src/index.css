@@ -26,12 +26,14 @@ body {
 .navbar {
   display: flex;
   justify-content: flex-end;
+  gap: 1rem;
   padding: 1.25rem;
   color: #fff;
   border-bottom: 1px solid orange;
 }
 
-.login-btn {
+.login-btn,
+.register-btn {
   padding: 0.75rem 1rem;
   font-size: 1.5rem;
   outline: none;
@@ -41,7 +43,8 @@ body {
   border-radius: 8px;
 }
 
-.login-btn:hover {
+.login-btn:hover,
+.register-btn:hover {
   filter: brightness(0.8);
 }
 
@@ -76,12 +79,16 @@ body {
   background: orange;
 }
 
-.form-wrapper {
+.content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   flex: 1 1 100%;
+}
+
+.form {
+  margin: 1rem;
 }
 
 form {
