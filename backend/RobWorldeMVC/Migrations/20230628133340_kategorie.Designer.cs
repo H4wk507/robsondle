@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Context;
 
@@ -10,12 +11,28 @@ using backend.Context;
 namespace RobWorldeMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230628133340_kategorie")]
+    partial class kategorie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.19");
+
+            modelBuilder.Entity("CategoriesPrompts", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PromptsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CategoriesId", "PromptsId");
+
+                    b.HasIndex("PromptsId");
+
+                    b.ToTable("CategoriesPrompts");
+                });
 
             modelBuilder.Entity("RobWorldeMVC.Models.Attempts", b =>
                 {
@@ -40,6 +57,21 @@ namespace RobWorldeMVC.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Attempts");
+                });
+
+            modelBuilder.Entity("RobWorldeMVC.Models.Categories", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("RobWorldeMVC.Models.Prompts", b =>
@@ -101,6 +133,21 @@ namespace RobWorldeMVC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CategoriesPrompts", b =>
+                {
+                    b.HasOne("RobWorldeMVC.Models.Categories", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RobWorldeMVC.Models.Prompts", null)
+                        .WithMany()
+                        .HasForeignKey("PromptsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RobWorldeMVC.Models.Attempts", b =>

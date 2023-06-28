@@ -1,6 +1,6 @@
 ﻿namespace RobWorldeMVC.DTO
 {
-    public class promptCreationDTO
+    public class CategoryCreationDTO
     {
         public string Data { get; set; } = null!;
     }
