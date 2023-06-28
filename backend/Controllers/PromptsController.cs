@@ -24,10 +24,14 @@ namespace RobWorldeMVC.Controllers
         [HttpPost("add")]
         public async Task<ActionResult> Add(promptCreationDTO promptCreationDTO)
         {
+            var categories = context.Categories.ToList().Where(category => ((IList<string>)promptCreationDTO.Categories).Contains(category.Name));
+
             var prompt = new Prompts
             {
                 Prompt = promptCreationDTO.Data,
+                Categories = categories.ToList(),
             };
+
             await context.AddAsync(prompt);
             await context.SaveChangesAsync();
             return Ok();
@@ -75,13 +79,15 @@ namespace RobWorldeMVC.Controllers
             context.Update(session);
             await context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(session.CurrentPrompt);
         }
 
         [HttpPost("addCategory")]
         public async Task<ActionResult> AddCategory(CategoryCreationDTO data) {
 
             var category = new Categories { Name = data.Data };
+            context.Add(category);
+            await context.SaveChangesAsync();
             return Ok();
         }
 
