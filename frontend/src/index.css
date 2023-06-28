@@ -66,8 +66,8 @@ body {
 
 .main {
   display: flex;
-  justify-content: center;
-  margin-top: 5rem;
+  flex-direction: column;
+  align-items: center;
   height: 100vh;
 }
 
@@ -125,4 +125,58 @@ form {
   border-radius: 8px;
   padding: 10px 24px;
   cursor: pointer;
+}
+
+.category {
+  margin: 2rem;
+  font-size: 2rem;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+.modal-container {
+  border: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--main);
+  z-index: 100;
+  background: #242424;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 16px 32px;
+  background-color: var(--main);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal > * {
+  font-size: 1.5rem;
+}
+
+.play-again {
+  padding: 0.75rem 1rem;
+  outline: none;
+  cursor: pointer;
+  background: orange;
+  border: none;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+.play-again:hover {
+  filter: brightness(0.8);
 }
