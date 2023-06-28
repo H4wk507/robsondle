@@ -16,5 +16,6 @@ namespace backend.Context
         public DbSet<Sessions> Sessions { get; set; }
         public DbSet<Prompts> Prompts { get; set; }
         public DbSet<Attempts> Attempts { get; set; }
+        public DbSet<Categories> Categories { get; set; }
     }
 }
