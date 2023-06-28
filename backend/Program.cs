@@ -33,6 +33,13 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+<<<<<<< HEAD:backend/Program.cs
+=======
+
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+
+
+>>>>>>> c86e1f0 (Categories):backend/RobWorldeMVC/Program.cs
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

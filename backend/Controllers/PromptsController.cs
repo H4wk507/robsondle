@@ -78,6 +78,19 @@ namespace RobWorldeMVC.Controllers
             return Ok();
         }
 
+        [HttpPost("addCategory")]
+        public async Task<ActionResult> AddCategory(CategoryCreationDTO data) {
+
+            var category = new Categories { Name = data.Data };
+            return Ok();
+        }
+
+        [HttpGet("categories")]
+        public async Task<ActionResult> Categories()
+        {
+            return Ok(context.Categories.ToList());
+        }
+
         [HttpPost("test")]
         public async Task<ActionResult> test(PromptDataDTO promptDataDTO)
         {
