@@ -16,6 +16,7 @@ export default function Login({ setCookie }: LoginProps) {
   const navigate = useNavigate();
 
   const onSubmit = async (formData: FormData) => {
+    // TODO: error checking
     try {
       const res = await fetch(API_LOGIN_URL, {
         method: "POST",
@@ -24,6 +25,8 @@ export default function Login({ setCookie }: LoginProps) {
         },
         body: JSON.stringify(formData),
       });
+      if (!res.ok)
+        throw new Error(`Incorrect request ${res.status}: ${res.statusText}`);
       const sessionToken = await res.text();
       setCookie("sessionToken", sessionToken, { path: "/" });
       navigate("/");

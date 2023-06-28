@@ -12,6 +12,4 @@ services:
       - "5050:80"
     container_name: robsondle-backend
     restart: always
-    volumes:
-      - ./wordle/Database/:/backend/Database
   

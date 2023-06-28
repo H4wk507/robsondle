@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
-import { TGrid, TLetter, TRow } from "../../helpers/types";
+import { TGrid, TRow } from "../../helpers/types";
 import Grid from "../Grid";
-import { API_WORD_URL } from "../../helpers/constants";
-
-const nrows = 6;
-const nletters = 5;
-
-const validCharacters = "abcdefghijklmnopqrstuvwxyząćęłńóśźż".split("");
+import {
+  API_INITIALIZE_URL,
+  API_WORD_URL,
+  NLETTERS,
+  NROWS,
+  VALIDCHARACTERS,
+} from "../../helpers/constants";
+import Category from "../Category";
+import WonModal from "../WonModal";
+import { getEmptyGrid } from "../../helpers/utils";
 
 export default function Wordle() {
-  const [grid, setGrid] = useState<TGrid>(
-    new Array<TRow>(nrows)
-      .fill([])
-      .map(() =>
-        new Array<TLetter>(nletters).fill({ value: null, color: null }),
-      ),
-  );
+  const [grid, setGrid] = useState<TGrid>(getEmptyGrid());
   const [currentRow, setCurrentRow] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
   const [hasWon, setHasWon] = useState(false);
   const [guessWord, setGuessWord] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [numberOfTries, setNumberOfTries] = useState(0);
 
   const matchWord = (word: TRow) => {
     if (word.length !== guessWord!.length) {
@@ -53,20 +53,21 @@ export default function Wordle() {
           setCurrentChar(currentChar - 1);
         }
       } else if (letter === "Enter") {
-        if (currentChar === nletters && currentRow < nrows) {
+        setNumberOfTries(numberOfTries + 1);
+        if (currentChar === NLETTERS && currentRow < NROWS) {
           setCurrentRow(currentRow + 1);
           setCurrentChar(0);
           const word = grid[currentRow];
           setGrid(
             grid.map((row, i) =>
               row.map((val, j) =>
-                i === currentRow && val.value // TODO: remove this
+                i === currentRow
                   ? {
                       ...val,
                       color:
                         val.value === guessWord![j]
                           ? "green"
-                          : guessWord?.includes(val.value)
+                          : guessWord?.includes(val.value!)
                           ? "yellow"
                           : null,
                     }
@@ -80,9 +81,9 @@ export default function Wordle() {
         }
       }
       letter = letter.toLowerCase();
-      if (!validCharacters.includes(letter)) {
+      if (!VALIDCHARACTERS.includes(letter)) {
         return;
-      } else if (currentChar < nletters) {
+      } else if (currentChar < NLETTERS) {
         setGrid(
           grid.map((row, i) =>
             row.map((val, j) =>
@@ -101,10 +102,12 @@ export default function Wordle() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(API_WORD_URL);
-        const word = await res.text();
-        setGuessWord(word);
-        console.log(word);
+        const url =
+          numberOfTries === NROWS || hasWon ? API_INITIALIZE_URL : API_WORD_URL;
+        const res = await fetch(url);
+        const { prompt } = await res.json();
+        setGuessWord(prompt);
+        console.log(prompt);
       } catch (err) {
         console.log(err);
       }
@@ -117,8 +120,27 @@ export default function Wordle() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  useEffect(() => {
+    if (hasWon) {
+      setOpen(true);
+    }
+  }, [hasWon]);
+
   return (
     <div className="main">
+      <WonModal
+        open={open}
+        setOpen={setOpen}
+        setGrid={setGrid}
+        setCurrentRow={setCurrentRow}
+        setCurrentChar={setCurrentChar}
+        guessWord={guessWord}
+        setHasWon={setHasWon}
+        setGuessWord={setGuessWord}
+        numberOfTries={numberOfTries}
+        setNumberOfTries={setNumberOfTries}
+      />
+      <Category />
       <Grid grid={grid} />
     </div>
   );
