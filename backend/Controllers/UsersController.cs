@@ -94,5 +94,21 @@ namespace RobWorldeMVC.Controllers
             var session = await context.Sessions.Include(s => s.User).ToListAsync();
             return Ok(session);
         }
+
+        [HttpGet("userPrompt")]
+        public async Task<ActionResult> userPrompt()
+        {
+            context.Sessions.RemoveRange(context.Sessions.Where(token => token.ExpirationDate < DateTime.UtcNow.AddSeconds(30)));
+            await context.SaveChangesAsync();
+
+            var requestToken = new Guid(Request.Headers.Authorization.ToString());
+            var session = await context.Sessions.Include(s => s.CurrentPrompt).Include(s => s.User).Where(t => t.Token == requestToken).FirstOrDefaultAsync();
+            if (session == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(session.CurrentPrompt);
+        }
     }
 }

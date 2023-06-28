@@ -33,6 +33,13 @@ namespace RobWorldeMVC.Controllers
             return Ok();
         }
 
+        [HttpGet("random")]
+        public async Task<ActionResult> GetRandom()
+        {
+            var prompt = getRandomPrompt();
+            return Ok(prompt);
+        }
+
 
         [HttpPost("addMany")]
         public async Task<ActionResult> AddMany(promptCreationMultipleDTO promptCreationMultipleDTO)

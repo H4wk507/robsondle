@@ -10,16 +10,20 @@ export default function Navbar() {
   return (
     <div className="navbar">
       <button
-        onClick={() =>
-          loggedIn ? removeCookie("sessionToken") : navigate("/login")
-        }
+        onClick={() => {
+          loggedIn
+            ? removeCookie("sessionToken", { path: "/" })
+            : navigate("/login");
+        }}
         className="login-btn"
       >
         {loggedIn ? "Logout" : "Login"}
       </button>
-      <button onClick={() => navigate("/register")} className="register-btn">
-        Register
-      </button>
+      {!loggedIn && (
+        <button onClick={() => navigate("/register")} className="register-btn">
+          Register
+        </button>
+      )}
     </div>
   );
 }

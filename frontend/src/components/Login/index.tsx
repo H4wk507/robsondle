@@ -2,6 +2,7 @@ import { CookieSetOptions } from "universal-cookie";
 import UserForm from "../UserForm";
 import { FormData } from "../../helpers/types";
 import { API_LOGIN_URL } from "../../helpers/constants";
+import { useNavigate } from "react-router-dom";
 
 interface LoginProps {
   setCookie: (
@@ -12,6 +13,8 @@ interface LoginProps {
 }
 
 export default function Login({ setCookie }: LoginProps) {
+  const navigate = useNavigate();
+
   const onSubmit = async (formData: FormData) => {
     try {
       const res = await fetch(API_LOGIN_URL, {
@@ -21,8 +24,9 @@ export default function Login({ setCookie }: LoginProps) {
         },
         body: JSON.stringify(formData),
       });
-      const sessionToken = await res.json();
+      const sessionToken = await res.text();
       setCookie("sessionToken", sessionToken, { path: "/" });
+      navigate("/");
     } catch (err) {
       console.log(err);
     }

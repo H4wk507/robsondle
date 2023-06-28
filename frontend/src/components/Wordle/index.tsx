@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { TGrid, TLetter, TRow } from "../../helpers/types";
 import Grid from "../Grid";
+import { API_WORD_URL } from "../../helpers/constants";
 
 const nrows = 6;
 const nletters = 5;
@@ -100,7 +101,7 @@ export default function Wordle() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://192.168.0.103/api/prompts/random");
+        const res = await fetch(API_WORD_URL);
         const word = await res.text();
         setGuessWord(word);
         console.log(word);
