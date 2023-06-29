@@ -1,6 +1,6 @@
 import { useCookies } from "react-cookie";
 import { API_INITIALIZE_URL } from "../../helpers/constants";
-import { TGrid, TRow } from "../../helpers/types";
+import { TGrid } from "../../helpers/types";
 import { getEmptyGrid } from "../../helpers/utils";
 
 interface WonModalProps {
@@ -12,6 +12,7 @@ interface WonModalProps {
   setHasWon: (hasWon: boolean) => void;
   guessWord: string | null;
   setGuessWord: (guessWord: string | null) => void;
+  setCategory: (category: string) => void;
   numberOfTries: number;
   setNumberOfTries: (numberOfTries: number) => void;
 }
@@ -25,6 +26,7 @@ export default function WonModal({
   setHasWon,
   guessWord,
   setGuessWord,
+  setCategory,
   numberOfTries,
   setNumberOfTries,
 }: WonModalProps) {
@@ -42,9 +44,12 @@ export default function WonModal({
         Authorization: cookies.sessionToken,
       },
     });
-    const { prompt } = await res.json();
+    const { prompt, categories } = await res.json();
+    const randomCategory =
+      categories[Math.floor(Math.random() * categories.length)];
     console.log(prompt);
     setGuessWord(prompt);
+    setCategory(randomCategory);
   };
 
   return (

@@ -18,6 +18,7 @@ export default function Wordle() {
   const [currentChar, setCurrentChar] = useState(0);
   const [hasWon, setHasWon] = useState(false);
   const [guessWord, setGuessWord] = useState<string | null>(null);
+  const [category, setCategory] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [numberOfTries, setNumberOfTries] = useState(0);
 
@@ -96,7 +97,15 @@ export default function Wordle() {
         setCurrentChar(currentChar + 1);
       }
     },
-    [guessWord, matchWord, currentChar, currentRow, grid, hasWon],
+    [
+      guessWord,
+      matchWord,
+      currentChar,
+      currentRow,
+      grid,
+      hasWon,
+      numberOfTries,
+    ],
   );
 
   useEffect(() => {
@@ -105,15 +114,18 @@ export default function Wordle() {
         const url =
           numberOfTries === NROWS || hasWon ? API_INITIALIZE_URL : API_WORD_URL;
         const res = await fetch(url);
-        const { prompt } = await res.json();
+        const { prompt, categories } = await res.json();
+        const randomCategory =
+          categories[Math.floor(Math.random() * categories.length)];
         setGuessWord(prompt);
+        setCategory(randomCategory);
         console.log(prompt);
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, []);
+  }, [hasWon, numberOfTries]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -137,10 +149,11 @@ export default function Wordle() {
         guessWord={guessWord}
         setHasWon={setHasWon}
         setGuessWord={setGuessWord}
+        setCategory={setCategory}
         numberOfTries={numberOfTries}
         setNumberOfTries={setNumberOfTries}
       />
-      <Category />
+      <Category category={category} />
       <Grid grid={grid} />
     </div>
   );
