@@ -1,3 +1,7 @@
-export default function Category() {
-  return <div className="category">Category: plant</div>;
+interface CategoryProps {
+  category: string;
+}
+
+export default function Category({ category }: CategoryProps) {
+  return <div className="category">Category: {category}</div>;
 }
