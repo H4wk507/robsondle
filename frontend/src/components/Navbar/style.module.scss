@@ -1,0 +1,61 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  color: var(--text-clr);
+  border-bottom: 1px solid var(--main-clr);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+
+  & .title {
+    font-size: 2rem;
+    color: var(--main-clr);
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+}
+
+.help {
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+
+  & > img {
+    display: block;
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(277deg)
+      brightness(101%) contrast(103%);
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.login-btn,
+.register-btn {
+  padding: 0.75rem 1rem;
+  font-size: 1.5rem;
+  outline: none;
+  cursor: pointer;
+  background: var(--main-clr);
+  border: none;
+  border-radius: 8px;
+  color: var(--text-clr);
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+}

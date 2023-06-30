@@ -9,30 +9,34 @@ import {
   VALIDCHARACTERS,
 } from "../../helpers/constants";
 import Category from "../Category";
-import WonModal from "../WonModal";
+import WonModal from "../Modals/WonModal";
 import { getEmptyGrid } from "../../helpers/utils";
+import styles from "./style.module.scss";
 
 export default function Wordle() {
   const [grid, setGrid] = useState<TGrid>(getEmptyGrid());
   const [currentRow, setCurrentRow] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
   const [hasWon, setHasWon] = useState(false);
-  const [guessWord, setGuessWord] = useState<string | null>(null);
+  const [guessWord, setGuessWord] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [numberOfTries, setNumberOfTries] = useState(0);
 
-  const matchWord = (word: TRow) => {
-    if (word.length !== guessWord!.length) {
-      return false;
-    }
-    for (let i = 0; i < word.length; i++) {
-      if (word[i].value !== guessWord![i]) {
+  const matchWord = useCallback(
+    (word: TRow) => {
+      if (word.length !== guessWord.length) {
         return false;
       }
-    }
-    return true;
-  };
+      for (let i = 0; i < word.length; i++) {
+        if (word[i].value !== guessWord[i]) {
+          return false;
+        }
+      }
+      return true;
+    },
+    [guessWord],
+  );
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -54,8 +58,8 @@ export default function Wordle() {
           setCurrentChar(currentChar - 1);
         }
       } else if (letter === "Enter") {
-        setNumberOfTries(numberOfTries + 1);
         if (currentChar === NLETTERS && currentRow < NROWS) {
+          setNumberOfTries(numberOfTries + 1);
           setCurrentRow(currentRow + 1);
           setCurrentChar(0);
           const word = grid[currentRow];
@@ -66,11 +70,11 @@ export default function Wordle() {
                   ? {
                       ...val,
                       color:
-                        val.value === guessWord![j]
+                        val.value === guessWord[j]
                           ? "green"
-                          : guessWord?.includes(val.value!)
+                          : guessWord.includes(val.value!)
                           ? "yellow"
-                          : null,
+                          : "black",
                     }
                   : { ...val },
               ),
@@ -139,7 +143,7 @@ export default function Wordle() {
   }, [hasWon]);
 
   return (
-    <div className="main">
+    <div className={styles.main}>
       <WonModal
         open={open}
         setOpen={setOpen}
