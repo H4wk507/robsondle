@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 services:
-  frontend: 
+  frontend:
     build: ./frontend
-    ports: 
+    ports:
       - "2137:5173"
     container_name: robsondle-frontend
     restart: always
@@ -12,4 +12,3 @@ services:
       - "5050:80"
     container_name: robsondle-backend
     restart: always
-  

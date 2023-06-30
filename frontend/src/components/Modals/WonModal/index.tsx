@@ -1,7 +1,9 @@
 import { useCookies } from "react-cookie";
-import { API_INITIALIZE_URL } from "../../helpers/constants";
-import { TGrid } from "../../helpers/types";
-import { getEmptyGrid } from "../../helpers/utils";
+import { API_INITIALIZE_URL } from "../../../helpers/constants";
+import { TGrid } from "../../../helpers/types";
+import { getEmptyGrid } from "../../../helpers/utils";
+import modalStyles from "../style.module.scss";
+import styles from "./style.module.scss";
 
 interface WonModalProps {
   open: boolean;
@@ -10,8 +12,8 @@ interface WonModalProps {
   setCurrentRow: (row: number) => void;
   setCurrentChar: (char: number) => void;
   setHasWon: (hasWon: boolean) => void;
-  guessWord: string | null;
-  setGuessWord: (guessWord: string | null) => void;
+  guessWord: string;
+  setGuessWord: (guessWord: string) => void;
   setCategory: (category: string) => void;
   numberOfTries: number;
   setNumberOfTries: (numberOfTries: number) => void;
@@ -56,9 +58,12 @@ export default function WonModal({
     <>
       {open && (
         <>
-          <div onClick={() => setOpen(false)} className="backdrop"></div>
-          <div className="modal-container">
-            <div className="modal">
+          <div
+            onClick={() => setOpen(false)}
+            className={modalStyles.backdrop}
+          ></div>
+          <div className={modalStyles["modal-container"]}>
+            <div className={modalStyles["modal"]}>
               <p>
                 You have won after {numberOfTries}{" "}
                 {numberOfTries === 1 ? "try" : "tries"}!
@@ -69,7 +74,7 @@ export default function WonModal({
                   setOpen(false);
                   resetGame();
                 }}
-                className="play-again"
+                className={styles["play-again"]}
               >
                 Play again
               </button>

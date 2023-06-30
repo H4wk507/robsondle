@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { FormData } from "../../helpers/types";
+import styles from "./style.module.scss";
 
 interface UserFormProps {
   title: string;
@@ -13,26 +14,27 @@ export default function UserForm({
   onSubmit,
 }: UserFormProps) {
   const { register, handleSubmit } = useForm<FormData>();
+  // TODO: add typing, submitting and error state on button click
   return (
     <>
-      <div className="content">
-        <div className="form">
-          <div className="form-title">{title}</div>
+      <div className={styles.content}>
+        <div className={styles.form}>
+          <div className={styles["form-title"]}>{title}</div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <input
-              className="name"
+              className={styles.name}
               type="text"
               placeholder="username"
               {...register("name")}
             />
             <input
-              className="password"
+              className={styles.password}
               type="password"
               placeholder="password"
               {...register("password")}
             />
-            <div className="submit-btn-container">
-              <button className="submit-btn">{submitBtnText}</button>
+            <div className={styles["submit-btn-container"]}>
+              <button className={styles["submit-btn"]}>{submitBtnText}</button>
             </div>
           </form>
         </div>
