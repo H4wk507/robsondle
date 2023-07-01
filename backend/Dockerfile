@@ -1,12 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-WORKDIR /app
+WORKDIR /RobWorldeMVC
 EXPOSE 80
 ENV ASPNETCORE_ENVIRONMENT Development
 
-COPY *.csproj ./
+COPY RobWorldeMVC/*.csproj .
 RUN dotnet restore
 
-COPY . ./
+COPY RobWorldeMVC .
 RUN dotnet build -c Release -o /app/build
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 

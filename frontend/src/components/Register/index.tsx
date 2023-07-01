@@ -19,7 +19,7 @@ export default function Register() {
       });
       if (!res.ok)
         throw new Error(
-          `Error during registration ${res.statusText} ${res.status}`,
+          `Error during registration ${res.statusText} ${res.status}`
         );
       const sessionToken = await res.text();
       setCookies("sessionToken", sessionToken, { path: "/" });
