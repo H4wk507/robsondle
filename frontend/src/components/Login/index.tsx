@@ -8,7 +8,7 @@ interface LoginProps {
   setCookie: (
     name: "sessionToken",
     value: string,
-    options?: CookieSetOptions | undefined,
+    options?: CookieSetOptions | undefined
   ) => void;
 }
 

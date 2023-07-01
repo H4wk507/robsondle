@@ -12,6 +12,7 @@ import Category from "../Category";
 import WonModal from "../Modals/WonModal";
 import { getEmptyGrid } from "../../helpers/utils";
 import styles from "./style.module.scss";
+import { useCookies } from "react-cookie";
 
 export default function Wordle() {
   const [grid, setGrid] = useState<TGrid>(getEmptyGrid());
@@ -22,6 +23,7 @@ export default function Wordle() {
   const [category, setCategory] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [numberOfTries, setNumberOfTries] = useState(0);
+  const [cookies] = useCookies(["sessionToken"]);
 
   const matchWord = useCallback(
     (word: TRow) => {
@@ -35,7 +37,7 @@ export default function Wordle() {
       }
       return true;
     },
-    [guessWord],
+    [guessWord]
   );
 
   const handleKeyDown = useCallback(
@@ -51,9 +53,9 @@ export default function Wordle() {
               row.map((val, j) =>
                 i === currentRow && j === currentChar - 1
                   ? { ...val, value: null }
-                  : { ...val },
-              ),
-            ),
+                  : { ...val }
+              )
+            )
           );
           setCurrentChar(currentChar - 1);
         }
@@ -76,9 +78,9 @@ export default function Wordle() {
                           ? "yellow"
                           : "black",
                     }
-                  : { ...val },
-              ),
-            ),
+                  : { ...val }
+              )
+            )
           );
           if (matchWord(word)) {
             setHasWon(true);
@@ -94,31 +96,33 @@ export default function Wordle() {
             row.map((val, j) =>
               i === currentRow && j === currentChar
                 ? { ...val, value: letter }
-                : { ...val },
-            ),
-          ),
+                : { ...val }
+            )
+          )
         );
         setCurrentChar(currentChar + 1);
       }
     },
-    [
-      guessWord,
-      matchWord,
-      currentChar,
-      currentRow,
-      grid,
-      hasWon,
-      numberOfTries,
-    ],
+    [guessWord, matchWord, currentChar, currentRow, grid, hasWon, numberOfTries]
   );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url =
-          numberOfTries === NROWS || hasWon ? API_INITIALIZE_URL : API_WORD_URL;
-        const res = await fetch(url);
+        // API_WORD_URL - zwraca slowo zwiazane z aktualna sesja
+        // API_INITIALIZE_URL - inizjalizuje nowe slowo do aktualnej sesji
+        const res =
+          numberOfTries === NROWS || hasWon
+            ? await fetch(API_INITIALIZE_URL, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: cookies.sessionToken,
+                },
+              })
+            : await fetch(API_WORD_URL);
         const { prompt, categories } = await res.json();
+        console.log(categories);
         const randomCategory =
           categories[Math.floor(Math.random() * categories.length)];
         setGuessWord(prompt);
@@ -129,7 +133,7 @@ export default function Wordle() {
       }
     };
     fetchData();
-  }, [hasWon, numberOfTries]);
+  }, [hasWon, numberOfTries, cookies.sessionToken]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
