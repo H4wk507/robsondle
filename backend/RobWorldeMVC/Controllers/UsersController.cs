@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RobWorldeMVC.DTO;
 using RobWorldeMVC.Models;
+using RobWorldeMVC.Controllers;
 
 namespace RobWorldeMVC.Controllers
 {
@@ -31,7 +32,8 @@ namespace RobWorldeMVC.Controllers
                 Password = usersCreationDTO.Password,
             };
 
-            var session = new Sessions {
+            var session = new Sessions
+            {
                 ExpirationDate = DateTime.UtcNow.AddMinutes(40),
                 User = user,
                 Token = Guid.NewGuid()
@@ -96,18 +98,23 @@ namespace RobWorldeMVC.Controllers
         }
 
         [HttpGet("userPrompt")]
-        public async Task<ActionResult> userPrompt()
+        public async Task<ActionResult<Prompts>> UserPrompt()
         {
-            var session = await context.Sessions.Include(session => session.CurrentPrompt).FirstOrDefaultAsync();
-            if (session == null )
+            var session = await context.Sessions.Include(s => s.CurrentPrompt).FirstOrDefaultAsync();
+            if (session == null)
             {
-                return NotFound("nie ma sesji");
+                return NotFound("Nie ma sesji.");
             }
-            if(session.CurrentPrompt == null)
+            if (session.CurrentPrompt == null)
             {
-                return NotFound("nie zainicjalizowano");
+                var promptsController = new PromptsController(context);
+                session.CurrentPrompt = promptsController.getRandomPrompt();
+                context.Update(session);
+                await context.SaveChangesAsync();
             }
+
             return Ok(session.CurrentPrompt);
         }
+
     }
 }

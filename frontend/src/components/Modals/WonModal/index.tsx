@@ -33,6 +33,7 @@ export default function WonModal({
   setNumberOfTries,
 }: WonModalProps) {
   const [cookies] = useCookies(["sessionToken"]);
+
   const resetGame = async () => {
     setGrid(getEmptyGrid());
     setCurrentRow(0);
