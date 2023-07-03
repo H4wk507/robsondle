@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { TGrid, TRow } from "../../helpers/types";
 import Grid from "../Grid";
 import {
-  API_INITIALIZE_URL,
   API_WORD_URL,
   NLETTERS,
   NROWS,
@@ -119,16 +118,7 @@ export default function Wordle() {
       try {
         // API_WORD_URL - zwraca slowo zwiazane z aktualna sesja
         // API_INITIALIZE_URL - inizjalizuje nowe slowo do aktualnej sesji
-        const res =
-          numberOfTries === NROWS || hasWon
-            ? await fetch(API_INITIALIZE_URL, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: cookies.sessionToken,
-                },
-              })
-            : await fetch(API_WORD_URL);
+        const res = await fetch(API_WORD_URL);
         const { prompt, categories } = await res.json();
         console.log(categories);
         const randomCategory =
@@ -141,7 +131,7 @@ export default function Wordle() {
       }
     };
     fetchData();
-  }, [hasWon, numberOfTries, cookies.sessionToken]);
+  }, [cookies.sessionToken]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
