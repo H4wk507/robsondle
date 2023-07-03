@@ -113,23 +113,25 @@ export default function Wordle() {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const url =
-          numberOfTries === NROWS || hasWon ? API_INITIALIZE_URL : API_WORD_URL;
-        const res = await fetch(url);
-        const { prompt, categories } = await res.json();
-        const randomCategory =
-          categories[Math.floor(Math.random() * categories.length)];
-        setGuessWord(prompt);
-        setCategory(randomCategory);
-        console.log(prompt);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, [hasWon, numberOfTries]);
+  const fetchData = async () => {
+    try {
+      const url =
+        numberOfTries === NROWS || hasWon ? API_INITIALIZE_URL : API_WORD_URL;
+      const res = await fetch(url);
+      const data = await res.json();
+      const prompt = data.prompt;
+      const categories = data.categories;
+      const randomCategory =
+        categories[Math.floor(Math.random() * categories.length)];
+      setGuessWord(prompt);
+      setCategory(randomCategory);
+      console.log(prompt);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  fetchData();
+}, [numberOfTries, hasWon]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);

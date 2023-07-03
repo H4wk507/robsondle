@@ -54,8 +54,10 @@ export default function App() {
       },
     ],
     {
-      basename: "/robsondle",
-    },
+      basename: "/",
+    }
   );
+  
   return <RouterProvider router={router} />;
+  
 }

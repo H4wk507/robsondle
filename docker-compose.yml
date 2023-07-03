@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 services:
   frontend:
     build: ./frontend
@@ -7,8 +7,12 @@ services:
     container_name: robsondle-frontend
     restart: always
   backend:
-    build: ./backend
+    build: ./backend/RobWorldeMVC
     ports:
-      - "5050:80"
+      - "5000:5001"
     container_name: robsondle-backend
     restart: always
+
+
+
+

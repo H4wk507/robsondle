@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://192.168.0.100:7088/api";
+export const API_BASE_URL = "http://localhost:5000/api";
 export const API_LOGIN_URL = `${API_BASE_URL}/users/authenticate`;
 export const API_REGISTER_URL = `${API_BASE_URL}/users/create`;
 export const API_WORD_URL = `${API_BASE_URL}/users/userPrompt`;
