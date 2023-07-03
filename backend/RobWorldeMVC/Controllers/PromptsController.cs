@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RobWorldeMVC.DTO;
 using RobWorldeMVC.Models;
+using RobWorldeMVC.Controllers;
 
 namespace RobWorldeMVC.Controllers
 {
@@ -63,7 +64,7 @@ namespace RobWorldeMVC.Controllers
         }
 
         [HttpPost("initialize")]
-        public async Task<ActionResult> initialize()
+        public async Task<ActionResult<Prompts>> Initialize()
         {
             context.Sessions.RemoveRange(context.Sessions.Where(token => token.ExpirationDate < DateTime.UtcNow.AddSeconds(30)));
             await context.SaveChangesAsync();
@@ -75,12 +76,16 @@ namespace RobWorldeMVC.Controllers
                 return NotFound();
             }
 
-            session.CurrentPrompt = getRandomPrompt();
+            var promptsController = new PromptsController(context);
+            var prompt = promptsController.getRandomPrompt();
+
+            session.CurrentPrompt = prompt;
             context.Update(session);
             await context.SaveChangesAsync();
 
-            return Ok(session.CurrentPrompt);
+            return Ok(prompt);
         }
+
 
         [HttpPost("addCategory")]
         public async Task<ActionResult> AddCategory(CategoryCreationDTO data) {

@@ -37,7 +37,7 @@ export default function Wordle() {
       }
       return true;
     },
-    [guessWord]
+    [guessWord],
   );
 
   const handleKeyDown = useCallback(
@@ -53,9 +53,9 @@ export default function Wordle() {
               row.map((val, j) =>
                 i === currentRow && j === currentChar - 1
                   ? { ...val, value: null }
-                  : { ...val }
-              )
-            )
+                  : { ...val },
+              ),
+            ),
           );
           setCurrentChar(currentChar - 1);
         }
@@ -78,9 +78,9 @@ export default function Wordle() {
                           ? "yellow"
                           : "black",
                     }
-                  : { ...val }
-              )
-            )
+                  : { ...val },
+              ),
+            ),
           );
           if (matchWord(word)) {
             setHasWon(true);
@@ -96,14 +96,22 @@ export default function Wordle() {
             row.map((val, j) =>
               i === currentRow && j === currentChar
                 ? { ...val, value: letter }
-                : { ...val }
-            )
-          )
+                : { ...val },
+            ),
+          ),
         );
         setCurrentChar(currentChar + 1);
       }
     },
-    [guessWord, matchWord, currentChar, currentRow, grid, hasWon, numberOfTries]
+    [
+      guessWord,
+      matchWord,
+      currentChar,
+      currentRow,
+      grid,
+      hasWon,
+      numberOfTries,
+    ],
   );
 
   useEffect(() => {

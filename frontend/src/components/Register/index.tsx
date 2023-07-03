@@ -1,15 +1,20 @@
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import UserForm from "../UserForm";
 import { FormData } from "../../helpers/types";
-import { useNavigate } from "react-router-dom";
 import { API_REGISTER_URL } from "../../helpers/constants";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router";
 
 export default function Register() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [, setCookies] = useCookies(["sessionToken"]);
   const navigate = useNavigate();
-  const [cookies, setCookies] = useCookies(["sessionToken"]);
 
   const onSubmit = async (formData: FormData) => {
     try {
+      setIsLoading(true);
       const res = await fetch(API_REGISTER_URL, {
         method: "POST",
         headers: {
@@ -19,18 +24,29 @@ export default function Register() {
       });
       if (!res.ok)
         throw new Error(
-          `Error during registration ${res.statusText} ${res.status}`
+          `Error during registration ${res.statusText} ${res.status}`,
         );
       const sessionToken = await res.text();
       setCookies("sessionToken", sessionToken, { path: "/" });
       navigate("/");
     } catch (err) {
+      toast.error("Username is already taken. Please choose another one.", {
+        position: toast.POSITION.BOTTOM_LEFT,
+      });
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
-  return cookies.sessionToken ? (
-    <div>You are already logged in!</div>
-  ) : (
-    <UserForm title="register" submitBtnText="Register" onSubmit={onSubmit} />
+
+  return (
+    <>
+      <ToastContainer />
+      <UserForm
+        title="Register"
+        submitBtnText={isLoading ? "Loading..." : "Register"}
+        onSubmit={onSubmit}
+      />
+    </>
   );
 }
