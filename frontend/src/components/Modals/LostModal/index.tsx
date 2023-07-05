@@ -1,3 +1,4 @@
+
 import { useCookies } from "react-cookie";
 import { API_INITIALIZE_URL } from "../../../helpers/constants";
 import { TGrid } from "../../../helpers/types";
@@ -5,13 +6,13 @@ import { getEmptyGrid } from "../../../helpers/utils";
 import modalStyles from "../style.module.scss";
 import styles from "./style.module.scss";
 
-interface WonModalProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
+interface LostModalProps {
+  openLost: boolean;
+  setOpenLost: (openLost: boolean) => void;
   setGrid: (grid: TGrid) => void;
   setCurrentRow: (row: number) => void;
   setCurrentChar: (char: number) => void;
-  setHasWon: (hasWon: boolean) => void;
+  setHasLost: (hasLost: boolean) => void;
   guessWord: string;
   setGuessWord: (guessWord: string) => void;
   setCategory: (category: string) => void;
@@ -19,26 +20,26 @@ interface WonModalProps {
   setNumberOfTries: (numberOfTries: number) => void;
 }
 
-export default function WonModal({
-  open,
-  setOpen,
+export default function LostModal({
+  openLost,
+  setOpenLost,
   setGrid,
   setCurrentRow,
   setCurrentChar,
-  setHasWon,
+  setHasLost,
   guessWord,
   setGuessWord,
   setCategory,
   numberOfTries,
   setNumberOfTries,
-}: WonModalProps) {
+}: LostModalProps) {
   const [cookies] = useCookies(["sessionToken"]);
 
   const resetGame = async () => {
     setGrid(getEmptyGrid());
     setCurrentRow(0);
     setCurrentChar(0);
-    setHasWon(false);
+    setHasLost(false);
     setNumberOfTries(0);
     const res = await fetch(API_INITIALIZE_URL, {
       method: "POST",
@@ -57,22 +58,21 @@ export default function WonModal({
 
   return (
     <>
-      {open && (
+      {openLost && (
         <>
           <div
-            onClick={() => setOpen(false)}
+            onClick={() => setOpenLost(false)}
             className={modalStyles.backdrop}
           ></div>
           <div className={modalStyles["modal-container"]}>
             <div className={modalStyles["modal"]}>
               <p>
-                You have won after {numberOfTries}{" "}
-                {numberOfTries === 1 ? "try" : "tries"}!
+                You have lost!
               </p>
               <p>The correct word was '{guessWord}'.</p>
               <button
                 onClick={() => {
-                  setOpen(false);
+                  setOpenLost(false);
                   resetGame();
                 }}
                 className={styles["play-again"]}

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RobWorldeMVC.DTO;
 using RobWorldeMVC.Models;
 using RobWorldeMVC.Controllers;
+using Microsoft.AspNetCore.Cors;
 
 namespace RobWorldeMVC.Controllers
 {
@@ -25,18 +26,16 @@ namespace RobWorldeMVC.Controllers
         [HttpPost("add")]
         public async Task<ActionResult> Add(promptCreationDTO promptCreationDTO)
         {
-            var categories = context.Categories.ToList().Where(category => ((IList<string>)promptCreationDTO.Categories).Contains(category.Name));
-
             var prompt = new Prompts
             {
                 Prompt = promptCreationDTO.Data,
-                Categories = categories.ToList(),
             };
 
             await context.AddAsync(prompt);
             await context.SaveChangesAsync();
             return Ok();
         }
+
 
         [HttpGet("random")]
         public async Task<ActionResult> GetRandom()
@@ -63,6 +62,7 @@ namespace RobWorldeMVC.Controllers
             return Ok();
         }
 
+
         [HttpPost("initialize")]
         public async Task<ActionResult<Prompts>> Initialize()
         {
@@ -85,6 +85,7 @@ namespace RobWorldeMVC.Controllers
 
             return Ok(prompt);
         }
+
 
 
         [HttpPost("addCategory")]

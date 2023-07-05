@@ -3,7 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -27,12 +37,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors(builder =>
-{
-    builder.WithOrigins("http://localhost:2137")
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-});
+app.UseCors();
 
 app.UseAuthorization();
 
