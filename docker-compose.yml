@@ -12,7 +12,3 @@ services:
       - "5000:5001"
     container_name: robsondle-backend
     restart: always
-
-
-
-

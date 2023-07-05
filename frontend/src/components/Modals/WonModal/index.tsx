@@ -1,17 +1,17 @@
 import { useCookies } from "react-cookie";
 import { API_INITIALIZE_URL } from "../../../helpers/constants";
-import { TGrid } from "../../../helpers/types";
+import { GameState, OpenModal, TGrid } from "../../../helpers/types";
 import { getEmptyGrid } from "../../../helpers/utils";
 import modalStyles from "../style.module.scss";
 import styles from "./style.module.scss";
 
 interface WonModalProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  setGameState: (gameState: GameState) => void;
+  open: OpenModal;
+  setOpen: (open: OpenModal) => void;
   setGrid: (grid: TGrid) => void;
   setCurrentRow: (row: number) => void;
   setCurrentChar: (char: number) => void;
-  setHasWon: (hasWon: boolean) => void;
   guessWord: string;
   setGuessWord: (guessWord: string) => void;
   setCategory: (category: string) => void;
@@ -20,12 +20,12 @@ interface WonModalProps {
 }
 
 export default function WonModal({
+  setGameState,
   open,
   setOpen,
   setGrid,
   setCurrentRow,
   setCurrentChar,
-  setHasWon,
   guessWord,
   setGuessWord,
   setCategory,
@@ -38,7 +38,7 @@ export default function WonModal({
     setGrid(getEmptyGrid());
     setCurrentRow(0);
     setCurrentChar(0);
-    setHasWon(false);
+    setGameState("playing");
     setNumberOfTries(0);
     const res = await fetch(API_INITIALIZE_URL, {
       method: "POST",
@@ -57,10 +57,10 @@ export default function WonModal({
 
   return (
     <>
-      {open && (
+      {open === "won" && (
         <>
           <div
-            onClick={() => setOpen(false)}
+            onClick={() => setOpen(null)}
             className={modalStyles.backdrop}
           ></div>
           <div className={modalStyles["modal-container"]}>
@@ -72,7 +72,7 @@ export default function WonModal({
               <p>The correct word was '{guessWord}'.</p>
               <button
                 onClick={() => {
-                  setOpen(false);
+                  setOpen(null);
                   resetGame();
                 }}
                 className={styles["play-again"]}

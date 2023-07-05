@@ -2,15 +2,11 @@ import React, { useState, SyntheticEvent } from "react";
 import { API_ADDWORD_URL } from "../../helpers/constants";
 import { useNavigate } from "react-router-dom";
 
-interface AddWordProps {
-  loggedIn: boolean;
-}
-
 interface WordData {
   Data: string;
 }
 
-const AddWord: React.FC<AddWordProps> = ({ loggedIn }) => {
+const AddWord = () => {
   const navigate = useNavigate();
   const [word, setWord] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -39,7 +35,10 @@ const AddWord: React.FC<AddWordProps> = ({ loggedIn }) => {
         setSuccessMessage("Word successfully added!");
         setWord("");
       } else {
-        console.error("Error adding the word to the database.", await response.text());
+        console.error(
+          "Error adding the word to the database.",
+          await response.text(),
+        );
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -74,7 +73,9 @@ const AddWord: React.FC<AddWordProps> = ({ loggedIn }) => {
       {successMessage && (
         <div>
           <p>{successMessage}</p>
-          <button onClick={handleReturnToPreviousPage}>Return to Previous Page</button>
+          <button onClick={handleReturnToPreviousPage}>
+            Return to Previous Page
+          </button>
         </div>
       )}
     </div>

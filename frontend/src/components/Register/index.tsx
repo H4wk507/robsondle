@@ -1,15 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserForm from "../UserForm";
 import { FormData } from "../../helpers/types";
 import { API_REGISTER_URL } from "../../helpers/constants";
 
-interface RegisterProps {
-  onSuccess: () => void;
-}
-
-export default function Register({ onSuccess }: RegisterProps) {
+export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (formData: FormData) => {
@@ -30,7 +26,6 @@ export default function Register({ onSuccess }: RegisterProps) {
       toast.success("Registration successful!", {
         position: toast.POSITION.BOTTOM_LEFT,
       });
-      onSuccess();
     } catch (err) {
       toast.error("Username is already taken. Please choose another one.", {
         position: toast.POSITION.BOTTOM_LEFT,

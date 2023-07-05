@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { TGrid, TRow } from "../../helpers/types";
+import { GameState, OpenModal, TGrid, TRow } from "../../helpers/types";
 import Grid from "../Grid";
 import {
   API_WORD_URL,
@@ -18,19 +18,14 @@ export default function Wordle() {
   const [grid, setGrid] = useState<TGrid>(getEmptyGrid());
   const [currentRow, setCurrentRow] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
-  
+
   const [guessWord, setGuessWord] = useState<string>("");
   const [category, setCategory] = useState<string>("");
-  
+
   const [numberOfTries, setNumberOfTries] = useState(0);
   const [cookies] = useCookies(["sessionToken"]);
-
-  const [hasWon, setHasWon] = useState(false);
-  const [open, setOpen] = useState(false);
-/* ---------------- */
-  const [hasLost, setHasLost] = useState(false);
-  const [openLost, setOpenLost] = useState(false);
-
+  const [gameState, setGameState] = useState<GameState>("playing");
+  const [open, setOpen] = useState<OpenModal>(null);
 
   const matchWord = useCallback(
     (word: TRow) => {
@@ -50,10 +45,7 @@ export default function Wordle() {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       let letter = e.key;
-      if (hasWon) {
-        return;
-      }
-      else if(hasLost){
+      if (gameState !== "playing") {
         return;
       }
       if (letter === "Backspace") {
@@ -94,11 +86,8 @@ export default function Wordle() {
             ),
           );
           if (matchWord(word)) {
-            setHasWon(true);
-          
-          }
-          else if(numberOfTries == 6){
-            setHasLost(true);
+            setGameState("won");
+            setOpen("won");
           }
         }
       }
@@ -124,9 +113,8 @@ export default function Wordle() {
       currentChar,
       currentRow,
       grid,
-      hasWon,
-      hasLost,
       numberOfTries,
+      gameState,
     ],
   );
 
@@ -156,76 +144,42 @@ export default function Wordle() {
   }, [handleKeyDown]);
 
   useEffect(() => {
-    if (hasWon) {
-      setOpen(true);
+    if (numberOfTries === NROWS && gameState === "playing") {
+      setGameState("lost");
+      setOpen("lost");
     }
-  }, [hasWon]);
-
-  useEffect(() => {
-    if (hasLost){
-      setOpenLost(true);
-    }
-  }, [hasLost]);
+  }, [numberOfTries, gameState]);
 
   return (
     <div className={styles.main}>
       <WonModal
+        setGameState={setGameState}
         open={open}
         setOpen={setOpen}
         setGrid={setGrid}
         setCurrentRow={setCurrentRow}
         setCurrentChar={setCurrentChar}
         guessWord={guessWord}
-        setHasWon={setHasWon}
         setGuessWord={setGuessWord}
         setCategory={setCategory}
         numberOfTries={numberOfTries}
         setNumberOfTries={setNumberOfTries}
       />
       <LostModal
-      openLost = {openLost}
-      setOpenLost={setOpenLost}
-      setGrid={setGrid}
-      setCurrentRow={setCurrentRow}
-      setCurrentChar={setCurrentChar}
-      guessWord={guessWord}
-      setHasLost={setHasLost}
-      setGuessWord={setGuessWord}
-      setCategory={setCategory}
-      numberOfTries={numberOfTries}
-      setNumberOfTries={setNumberOfTries}
+        setGameState={setGameState}
+        open={open}
+        setOpen={setOpen}
+        setGrid={setGrid}
+        setCurrentRow={setCurrentRow}
+        setCurrentChar={setCurrentChar}
+        guessWord={guessWord}
+        setGuessWord={setGuessWord}
+        setCategory={setCategory}
+        numberOfTries={numberOfTries}
+        setNumberOfTries={setNumberOfTries}
       />
       <Category category={category} />
       <Grid grid={grid} />
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

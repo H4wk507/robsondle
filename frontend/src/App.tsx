@@ -66,7 +66,7 @@ export default function App() {
     ],
     {
       basename: "/",
-    }
+    },
   );
 
   return <RouterProvider router={router} />;

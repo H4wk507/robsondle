@@ -1,18 +1,17 @@
-
 import { useCookies } from "react-cookie";
 import { API_INITIALIZE_URL } from "../../../helpers/constants";
-import { TGrid } from "../../../helpers/types";
+import { GameState, OpenModal, TGrid } from "../../../helpers/types";
 import { getEmptyGrid } from "../../../helpers/utils";
 import modalStyles from "../style.module.scss";
 import styles from "./style.module.scss";
 
 interface LostModalProps {
-  openLost: boolean;
-  setOpenLost: (openLost: boolean) => void;
+  setGameState: (gameState: GameState) => void;
+  open: OpenModal;
+  setOpen: (open: OpenModal) => void;
   setGrid: (grid: TGrid) => void;
   setCurrentRow: (row: number) => void;
   setCurrentChar: (char: number) => void;
-  setHasLost: (hasLost: boolean) => void;
   guessWord: string;
   setGuessWord: (guessWord: string) => void;
   setCategory: (category: string) => void;
@@ -21,16 +20,15 @@ interface LostModalProps {
 }
 
 export default function LostModal({
-  openLost,
-  setOpenLost,
+  setGameState,
+  open,
+  setOpen,
   setGrid,
   setCurrentRow,
   setCurrentChar,
-  setHasLost,
   guessWord,
   setGuessWord,
   setCategory,
-  numberOfTries,
   setNumberOfTries,
 }: LostModalProps) {
   const [cookies] = useCookies(["sessionToken"]);
@@ -39,7 +37,7 @@ export default function LostModal({
     setGrid(getEmptyGrid());
     setCurrentRow(0);
     setCurrentChar(0);
-    setHasLost(false);
+    setGameState("playing");
     setNumberOfTries(0);
     const res = await fetch(API_INITIALIZE_URL, {
       method: "POST",
@@ -58,21 +56,19 @@ export default function LostModal({
 
   return (
     <>
-      {openLost && (
+      {open === "lost" && (
         <>
           <div
-            onClick={() => setOpenLost(false)}
+            onClick={() => setOpen(null)}
             className={modalStyles.backdrop}
           ></div>
           <div className={modalStyles["modal-container"]}>
             <div className={modalStyles["modal"]}>
-              <p>
-                You have lost!
-              </p>
+              <p>You have lost!</p>
               <p>The correct word was '{guessWord}'.</p>
               <button
                 onClick={() => {
-                  setOpenLost(false);
+                  setOpen(null);
                   resetGame();
                 }}
                 className={styles["play-again"]}

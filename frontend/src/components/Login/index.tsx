@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { CookieSetOptions } from "universal-cookie";
 import UserForm from "../UserForm";
 import { FormData } from "../../helpers/types";
@@ -11,7 +10,7 @@ interface LoginProps {
   setCookie: (
     name: "sessionToken",
     value: string,
-    options?: CookieSetOptions | undefined
+    options?: CookieSetOptions | undefined,
   ) => void;
 }
 
