@@ -6,3 +6,5 @@ export type FormData = {
   name: string;
   password: string;
 };
+export type GameState = "playing" | "won" | "lost";
+export type OpenModal = "won" | "lost" | null;

@@ -1,5 +1,5 @@
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import helpCircle from "/help-circle-outline.svg";
 import { useState } from "react";
 import HelpModal from "../Modals/HelpModal";
@@ -12,6 +12,11 @@ export default function Navbar() {
 
   const loggedIn = cookies.sessionToken;
 
+  const handleLogout = () => {
+    removeCookie("sessionToken", { path: "/" });
+    navigate("/login");
+  };
+
   return (
     <div className={styles.navbar}>
       <HelpModal open={open} setOpen={setOpen} />
@@ -22,25 +27,26 @@ export default function Navbar() {
       </div>
       <div className={styles.right}>
         <div className={styles.help}>
-          <img onClick={() => setOpen(true)} src={helpCircle} />
+          <img onClick={() => setOpen(true)} src={helpCircle} alt="Help" />
         </div>
-        <button
-          onClick={() => {
-            loggedIn
-              ? removeCookie("sessionToken", { path: "/" })
-              : navigate("/login");
-          }}
-          className={styles["login-btn"]}
-        >
-          {loggedIn ? "Logout" : "Login"}
-        </button>
-        {!loggedIn && (
-          <button
-            onClick={() => navigate("/register")}
-            className={styles["register-btn"]}
-          >
-            Register
-          </button>
+        {loggedIn ? (
+          <>
+            <button onClick={handleLogout} className={styles["login-btn"]}>
+              Logout
+            </button>
+            <Link to="/add-word" className={styles["addword-btn"]}>
+              Add Word
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className={styles["login-btn"]}>
+              Login
+            </Link>
+            <Link to="/register" className={styles["register-btn"]}>
+              Register
+            </Link>
+          </>
         )}
       </div>
     </div>

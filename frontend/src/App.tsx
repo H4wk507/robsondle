@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import { useCookies } from "react-cookie";
 import Register from "./components/Register";
+import AddWord from "./components/AddWord";
 
 const Layout = ({ children }: { children: JSX.Element }) => {
   return (
@@ -49,6 +50,16 @@ export default function App() {
         element: (
           <Layout>
             <Register />
+          </Layout>
+        ),
+      },
+      {
+        path: "/add-word",
+        element: (
+          <Layout>
+            <ProtectedContent>
+              <AddWord />
+            </ProtectedContent>
           </Layout>
         ),
       },

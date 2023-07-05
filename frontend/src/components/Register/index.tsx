@@ -4,13 +4,9 @@ import "react-toastify/dist/ReactToastify.css";
 import UserForm from "../UserForm";
 import { FormData } from "../../helpers/types";
 import { API_REGISTER_URL } from "../../helpers/constants";
-import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router";
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
-  const [, setCookies] = useCookies(["sessionToken"]);
-  const navigate = useNavigate();
 
   const onSubmit = async (formData: FormData) => {
     try {
@@ -22,13 +18,14 @@ export default function Register() {
         },
         body: JSON.stringify(formData),
       });
-      if (!res.ok)
-        throw new Error(
-          `Error during registration ${res.statusText} ${res.status}`,
-        );
-      const sessionToken = await res.text();
-      setCookies("sessionToken", sessionToken, { path: "/" });
-      navigate("/");
+
+      if (!res.ok) {
+        throw new Error(`Incorrect request ${res.status}: ${res.statusText}`);
+      }
+
+      toast.success("Registration successful!", {
+        position: toast.POSITION.BOTTOM_LEFT,
+      });
     } catch (err) {
       toast.error("Username is already taken. Please choose another one.", {
         position: toast.POSITION.BOTTOM_LEFT,

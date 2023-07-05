@@ -5,7 +5,7 @@ import { getEmptyGrid } from "../../../helpers/utils";
 import modalStyles from "../style.module.scss";
 import styles from "./style.module.scss";
 
-interface WonModalProps {
+interface LostModalProps {
   setGameState: (gameState: GameState) => void;
   open: OpenModal;
   setOpen: (open: OpenModal) => void;
@@ -19,7 +19,7 @@ interface WonModalProps {
   setNumberOfTries: (numberOfTries: number) => void;
 }
 
-export default function WonModal({
+export default function LostModal({
   setGameState,
   open,
   setOpen,
@@ -29,9 +29,8 @@ export default function WonModal({
   guessWord,
   setGuessWord,
   setCategory,
-  numberOfTries,
   setNumberOfTries,
-}: WonModalProps) {
+}: LostModalProps) {
   const [cookies] = useCookies(["sessionToken"]);
 
   const resetGame = async () => {
@@ -57,7 +56,7 @@ export default function WonModal({
 
   return (
     <>
-      {open === "won" && (
+      {open === "lost" && (
         <>
           <div
             onClick={() => setOpen(null)}
@@ -65,10 +64,7 @@ export default function WonModal({
           ></div>
           <div className={modalStyles["modal-container"]}>
             <div className={modalStyles["modal"]}>
-              <p>
-                You have won after {numberOfTries}{" "}
-                {numberOfTries === 1 ? "try" : "tries"}!
-              </p>
+              <p>You have lost!</p>
               <p>The correct word was '{guessWord}'.</p>
               <button
                 onClick={() => {

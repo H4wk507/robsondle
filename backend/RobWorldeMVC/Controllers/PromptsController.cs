@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RobWorldeMVC.DTO;
 using RobWorldeMVC.Models;
 using RobWorldeMVC.Controllers;
+using Microsoft.AspNetCore.Cors;
 
 namespace RobWorldeMVC.Controllers
 {
@@ -25,18 +26,16 @@ namespace RobWorldeMVC.Controllers
         [HttpPost("add")]
         public async Task<ActionResult> Add(promptCreationDTO promptCreationDTO)
         {
-            var categories = context.Categories.ToList().Where(category => ((IList<string>)promptCreationDTO.Categories).Contains(category.Name));
-
             var prompt = new Prompts
             {
                 Prompt = promptCreationDTO.Data,
-                Categories = categories.ToList(),
             };
 
             await context.AddAsync(prompt);
             await context.SaveChangesAsync();
             return Ok();
         }
+
 
         [HttpGet("random")]
         public async Task<ActionResult> GetRandom()
@@ -51,7 +50,8 @@ namespace RobWorldeMVC.Controllers
         {
             for (var i = 0; i < promptCreationMultipleDTO.Data.Length; i++)
             {
-                if (promptCreationMultipleDTO.Data[i].Length == 5) {
+                if (promptCreationMultipleDTO.Data[i].Length == 5)
+                {
                     var prompt = new Prompts
                     {
                         Prompt = promptCreationMultipleDTO.Data[i]
@@ -62,6 +62,7 @@ namespace RobWorldeMVC.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
+
 
         [HttpPost("initialize")]
         public async Task<ActionResult<Prompts>> Initialize()
@@ -88,7 +89,8 @@ namespace RobWorldeMVC.Controllers
 
 
         [HttpPost("addCategory")]
-        public async Task<ActionResult> AddCategory(CategoryCreationDTO data) {
+        public async Task<ActionResult> AddCategory(CategoryCreationDTO data)
+        {
 
             var category = new Categories { Name = data.Data };
             context.Add(category);
@@ -110,7 +112,7 @@ namespace RobWorldeMVC.Controllers
 
             var requestToken = new Guid(Request.Headers.Authorization.ToString());
             var session = await context.Sessions.Include(s => s.CurrentPrompt).Include(s => s.User).Where(t => t.Token == requestToken).FirstOrDefaultAsync();
-            
+
             if (session == null)
             {
                 return NotFound("User");
