@@ -23,51 +23,46 @@ const ProtectedContent = ({ children }: { children?: JSX.Element }) => {
 };
 
 export default function App() {
-  const router = createBrowserRouter(
-    [
-      {
-        path: "/",
-        element: (
-          <Layout>
-            <ProtectedContent>
-              <Wordle />
-            </ProtectedContent>
-          </Layout>
-        ),
-      },
-      {
-        path: "/login",
-        element: (
-          <Layout>
-            <ProtectedContent>
-              <div>You are already logged in!</div>
-            </ProtectedContent>
-          </Layout>
-        ),
-      },
-      {
-        path: "/register",
-        element: (
-          <Layout>
-            <Register />
-          </Layout>
-        ),
-      },
-      {
-        path: "/add-word",
-        element: (
-          <Layout>
-            <ProtectedContent>
-              <AddWord />
-            </ProtectedContent>
-          </Layout>
-        ),
-      },
-    ],
+  const router = createBrowserRouter([
     {
-      basename: "/",
+      path: "/",
+      element: (
+        <Layout>
+          <ProtectedContent>
+            <Wordle />
+          </ProtectedContent>
+        </Layout>
+      ),
     },
-  );
+    {
+      path: "/login",
+      element: (
+        <Layout>
+          <ProtectedContent>
+            <div>You are already logged in!</div>
+          </ProtectedContent>
+        </Layout>
+      ),
+    },
+    {
+      path: "/register",
+      element: (
+        <Layout>
+          <Register />
+        </Layout>
+      ),
+    },
+    {
+      path: "/add-word",
+      element: (
+        <Layout>
+          <ProtectedContent>
+            <AddWord />
+          </ProtectedContent>
+        </Layout>
+      ),
+    },
+  ]);
 
   return <RouterProvider router={router} />;
 }
